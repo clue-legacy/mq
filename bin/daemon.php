@@ -6,6 +6,7 @@ use React\Socket\Server;
 use Ratchet\WebSocket\WsServer;
 use Datagram\Socket;
 use Clue\DatagramSocketServer;
+use Clue\StdioServer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -26,6 +27,9 @@ $loop->addPeriodicTimer(5.0, function () use ($messenger) {
     $messenger->event('time', microtime(true));
 });
 
+$stdioServer = new StdioServer($messenger, $loop);
+
+echo 'php://stdio' . PHP_EOL;
 echo 'ws://localhost:8081' . PHP_EOL;
 echo 'comet://localhost:8082' . PHP_EOL;
 echo 'udp://localhost:8083' . PHP_EOL;
