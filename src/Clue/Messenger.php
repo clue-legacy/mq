@@ -32,7 +32,7 @@ class Messenger implements MessageComponentInterface
             }
         }
 
-        $this->setStatus($conn, 'pencil');
+        $this->setStatus($conn, 'user');
     }
 
     public function onMessage(ConnectionInterface $from, $raw)
