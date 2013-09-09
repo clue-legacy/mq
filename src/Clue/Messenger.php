@@ -10,6 +10,7 @@ use Ratchet\Wamp\ServerProtocol as Wamp;
 class Messenger implements MessageComponentInterface
 {
     protected $clients;
+    protected $status;
 
     public function __construct()
     {
@@ -18,10 +19,20 @@ class Messenger implements MessageComponentInterface
 
     public function onOpen(ConnectionInterface $conn)
     {
+
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
 
         echo "New connection! ({$conn->resourceId})\n";
+
+        // resend current stati
+        foreach ($this->clients as $client) {
+            if (isset($client->status)) {
+                $this->eventOne($conn, 'status', array('uid' => $client->resourceId, 'status' => $client->status));
+            }
+        }
+
+        $this->setStatus($conn, 'pencil');
     }
 
     public function onMessage(ConnectionInterface $from, $raw)
@@ -35,9 +46,13 @@ class Messenger implements MessageComponentInterface
 
         echo 'Received ' . json_encode($data) . ' from ' . $from->resourceId . PHP_EOL;
 
-        if (!isset($from->user)) {
-            $this->authenticate($from, $data);
-            return;
+//         if (!isset($from->user)) {
+//             $this->authenticate($from, $data);
+//             return;
+//         }
+
+        if ($data[0] === 7 && $data[1] === 'status') {
+            $this->setStatus($from, $data[2]);
         }
 
         $this->broadcast($data, $from);
@@ -49,6 +64,8 @@ class Messenger implements MessageComponentInterface
         $this->clients->detach($conn);
 
         echo "Connection {$conn->resourceId} has disconnected\n";
+
+        $this->setStatus($conn, null);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
@@ -61,6 +78,11 @@ class Messenger implements MessageComponentInterface
     public function event($name, $data)
     {
         return $this->broadcast(array(Wamp::MSG_EVENT, $name, $data));
+    }
+
+    private function eventOne(ConnectionInterface $client, $name, $data)
+    {
+        return $this->send($client, array(Wamp::MSG_EVENT, $name, $data));
     }
 
     public function broadcast($data, ConnectionInterface $except = null)
@@ -90,5 +112,18 @@ class Messenger implements MessageComponentInterface
     public function authenticate(ConnectionInterface $client, $data)
     {
         $client->user = 'asd';
+    }
+
+    private function setStatus(ConnectionInterface $client, $status)
+    {
+        $uid = $client->resourceId;
+
+        $this->event('status', array('uid' => $uid, 'status' => $status));
+
+        if (!$status) {
+            unset($client->status);
+        } else {
+            $client->status = $status;
+        }
     }
 }

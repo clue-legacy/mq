@@ -39,16 +39,22 @@
       <a class="btn btn-large btn-primary" href="#">
         <i class="icon-comment"></i> Post
       </a>
+      
+	<div class="btn-group" id="stati">
+	  <a class="btn btn-primary" href="#"><i class="icon-user"></i> Status Icon</a>
+	  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+	    <span class="icon-caret-down"></span></a>
+	  <ul class="dropdown-menu">
+	    <li><a href="#"><i class="icon-fixed-width icon-pencil"></i> Pencil</a></li>
+	    <li><a href="#"><i class="icon-fixed-width icon-trash"></i> Trash</a></li>
+	    <li><a href="#"><i class="icon-fixed-width icon-ban-circle"></i> Ban</a></li>
+	  </ul>
+	</div>
+      
     </div>
     
     <h2>Users</h2>
     <div id="users">
-      <div id="u1">
-      </div>
-      <div id="u2">
-      </div>
-      <div id="u3">
-      </div>
     </div>
     
     <h2>Log output</h2>
@@ -76,15 +82,41 @@
         $("log").grab(new Element("pre", {text : JSON.stringify(data) }));
         
         $("log").getChildren().slice(0,-20).forEach(function (elem) { elem.destroy(); });
+        
+        if (event == "status") {
+        	var elem = $("users").getElement("#u"+data.uid);
+        	if (!elem) {
+        		elem = (new Element("div", {"id":"u"+data.uid,"text":data.uid}).grab(new Element("i"))).inject($("users"));
+        	}
+        	
+        	if (!data.status) {
+        		elem.destroy();
+        	} else {
+        	    elem.getElement("i").set("class", "icon-" + data.status);
+        	}
+        }
     };
     messenger.onConnect = function() {
     	$("status").getChildren().addClass("hidden");
     	$("status").getChildren(".connected").removeClass("hidden");
     };
     
+    $("stati").getElements("ul li a").addEvent("click", function() {
+    	console.debug(this);
+    	var status = this.getElement("i").get("class").replace("icon-fixed-width", "");
+    	this.getParent(".btn-group").getElement(".btn-primary i").set("class", "icon-" + status);
+    	
+    	messenger.send([7, "status", status]);
+    	return false;
+    });
+    
     $("callback").getElement("a").addEvent("click", function() {
     	this.addClass("btn-disabled").getElement("i").set("class", "icon-spin icon-spinner");
     	messenger.send([7, "ok"]);
+    	
+    	(function() {
+    		this.removeClass("btn-disabled").getElement("i").set("class", "icon-comment");
+    	}).delay(500, this);
     	return false;
     });
 })();
