@@ -1,4 +1,6 @@
 {
+    "name": "clue/mq",
+    "description": "websocket/comet message queue",
     "require": {
         "cboden/ratchet": "0.2.*",
         "react/http": "0.2.*",
