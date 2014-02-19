@@ -2,9 +2,14 @@
 
 namespace Clue\Comet;
 
-class ComentMessenger extends React\Stream\Stream
+use React\Http\Response;
+use React\Stream\Stream;
+
+class ComentMessenger extends Stream
 {
     const TIMEOUT_WAIT = 30;
+
+    private $response;
 
     public function __construct(Response $response, LoopInterface $loop)
     {
