@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1e0ff6a639f7d65600b968f55af06951",
+    "hash": "8cd42e306a3853f35a53547136e57b48",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -56,16 +56,16 @@
         },
         {
             "name": "clue/datagram",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/datagram.git",
-                "reference": "0c22ecb073f2421eb0be1788efe965147285c380"
+                "reference": "726b8ea3c5259ec61d580944c6f37ad3559dac3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/datagram/zipball/0c22ecb073f2421eb0be1788efe965147285c380",
-                "reference": "0c22ecb073f2421eb0be1788efe965147285c380",
+                "url": "https://api.github.com/repos/clue/datagram/zipball/726b8ea3c5259ec61d580944c6f37ad3559dac3c",
+                "reference": "726b8ea3c5259ec61d580944c6f37ad3559dac3c",
                 "shasum": ""
             },
             "require": {
@@ -95,7 +95,7 @@
                 "server",
                 "udp"
             ],
-            "time": "2013-06-23 22:05:21"
+            "time": "2014-03-03 23:29:41"
         },
         {
             "name": "evenement/evenement",

@@ -5,7 +5,7 @@
         "cboden/ratchet": "0.2.*",
         "react/http": "0.2.*",
         "react/promise": "~1",
-        "clue/datagram": "0.3.*"
+        "clue/datagram": "0.4.*"
     },
     "autoload": {
         "psr-0": { "Clue": "src/" }
